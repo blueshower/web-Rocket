@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="RevenueDownloadCSS.css">
+    <script>
+        if (window.location !== window.parent.location) {
+          // 在 iframe 內，則不做任何跳轉
+        } else {
+          //被獨立開啟，導向 index.html
+          window.location.href = "index.html";
+        }
+      </script>
+</head>
+<body>
+<p></p>
+<p></p>
+<div>
+    <span id="total1" style="color: #FF0000;">總筆數：__筆，</span>
+    <span id="total2" style="color: #FF0000;">總營收：__元</span>
+</div>
+<hr>
+<label for="start_date">起始日期：</label>
+<input type="date" id="start_date" name="start_date">
+<p></p>
+<label for="end_date">结束日期：</label>
+<input type="date" id="end_date" name="end_date"><br>
+<hr>
+<label for="">請先選擇日期再按查詢</label>
+<button class="button" onclick="calculateSHA256()">查詢下載</button>
+<hr>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script>
+    const company = localStorage.getItem("company");//營運編號EX→2000043
+    const token = localStorage.getItem("token");//token
+    // console.log(company); 
+    // console.log(token); 
+    async function calculateSHA256() {
+        const begin1 = document.getElementById("start_date").value;
+        const end1 = document.getElementById("end_date").value;
+        // 檢查輸入的日期是否合法
+        if (!isValidDate(begin1) || !isValidDate(end1)) {
+            alert("請輸入正確的日期格式!");
+            return;
+        }
+        function isValidDate(dateString) {
+            const regex = /^\d{4}-\d{2}-\d{2}$/;
+            if (!regex.test(dateString)) {
+                return false;
+            }
+            const date = new Date(dateString);
+            return date.toString() !== 'Invalid Date';
+        }
+        // 檢查起始日期和結束日期的差距是否小於等於31天
+        const startDate = new Date(begin1);
+        const endDate = new Date(end1);
+        const diffInDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+        if (diffInDays > 31) {
+            alert("起始日期和結束日期的差距不能超過31天!");
+            return;
+        }
+        // const token = "133C686D-5B96-4E10-8A59-8A5E4A797774";
+        const inputString = "begin=" + begin1 + "&company="+company + "&end=" + end1 + token;
+        const hash = await SHA256(inputString);
+        apirock13(hash);
+    }
+
+    async function SHA256(input) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(input);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    function apirock13(hash) {
+        axios.get('https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/Sales.aspx',
+            {
+                params: {
+                    begin: document.getElementById("start_date").value,
+                    company,
+                    end: document.getElementById("end_date").value,
+                    sign: hash,
+                }
+            })
+            .then(function (response) {
+                console.log(response);
+                let apiArray = response.data.sales;
+                let total3 = response.data.sales.length;
+                document.querySelector("#total1").innerHTML = "總筆數：" + total3 + " 筆，";
+                // 將 detail 数组中的每个对象展开并合并到每个 apiArray 元素中
+                apiArray.forEach(function(item) {
+                    item.details = item.detail;  // 假设 detail 是一个数组
+                    delete item.detail;
+                });
+                let total4 = apiArray.reduce((sum, item) => sum + parseFloat(item.price), 0);
+                document.querySelector("#total2").innerHTML = "總營收：" + total4 + " 元";
+
+                // 展开 detail 数据到新的数组中
+                let expandedArray = [];
+                apiArray.forEach(item => {
+                    item.details.forEach(detailItem => {
+                        let newItem = { ...item, ...detailItem };
+                        delete newItem.details;
+                        expandedArray.push(newItem);
+                    });
+                });
+                generateAndDownloadExcel(expandedArray);
+                //console.log(apiArray);
+            })
+            .catch((error) => console.log(error));
+    }
+
+    function generateAndDownloadExcel(apiArray) {
+    // 將資料轉換成 Excel 格式
+    const begin1 = document.getElementById("start_date").value;
+    const end1 = document.getElementById("end_date").value;
+
+    // 遍歷 apiArray，找到優惠券並將 price 設為 0
+    apiArray.forEach(item => {
+        if (item.type==="優惠券") { // 假設優惠券屬性名稱為 coupon，可以根據實際情況修改
+            item.price = 0;
+        }
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(apiArray);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    // 將 workbook 轉換成 Excel 檔案並下載
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', begin1 + '-' + end1 + '-' + '設備營收.xlsx');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+</script>
+</body>
+</html>

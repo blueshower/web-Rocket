@@ -1,0 +1,72 @@
+button{
+    width:100px;
+    height:30px;
+    line-height:25px;
+    padding:1px;
+    background:#4d4d4d;
+    color:#FFFF00;
+    border-radius: 0 10px 0 10px;
+    font-family:"微軟正黑體";
+    font-weight:bold;
+}
+.container {
+    display: flex;
+}
+
+.column {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #999;
+    text-align: center;
+    width: 300px;
+}
+.fsize{ font-size: 12px;  }
+.itemblue {
+margin: 0px;
+padding: 2px;
+background-color: #f0f0f0;
+border: 2px solid #666666;
+text-align: left;
+}
+.itemred {
+margin: 0px;
+padding: 2px;
+background-color: #f0f0f0;
+border: 2px solid #FF0000;
+text-align: left;
+}
+.itemorange {
+margin: 0px;
+padding: 2px;
+background-color: #f0f0f0;
+border: 2px solid #FFAA33;
+text-align: left;
+}
+.itembrown {
+margin: 0px;
+padding: 2px;
+background-color: #f0f0f0;
+border: 2px solid #8B4513;
+text-align: left;
+}
+.itemgreen {
+margin: 0px;
+padding: 2px;
+background-color: #f0f0f0;
+border: 2px solid #32CD32;
+text-align: left;
+}
+.itemyellow {
+margin: 0px;
+padding: 2px;
+background-color: #f0f0f0;
+border: 2px solid #FFFF00;
+text-align: left;
+}
+.itempink {
+margin: 0px;
+padding: 2px;
+background-color: #f0f0f0;
+border: 2px solid #FF0088;
+text-align: left;
+}

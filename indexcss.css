@@ -1,0 +1,108 @@
+/* 首頁的 CSS */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0 20px 0 20px;  /* 移除頁面邊距 */
+    padding: 0;  /* 移除內邊距 */
+    background-color: #AAAAAA;
+}
+
+nav {
+    background: linear-gradient(90deg, #4CAF50, #008CBA); /* 漸變背景色 */
+    color: white;
+    position: sticky; /* 固定在頂部 */
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 增加陰影效果 */
+    padding: 10px;
+    margin: 0;  /* 移除外邊距，避免與下方的元素產生間隙 */
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* 將選項置中 */
+    align-items: center;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px; /* 圓角按鈕效果 */
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* 懸停時增加透明背景 */
+    color: #FFF;
+}
+
+/* 設定 <select> 和 <iframe> 的容器 */
+.container {
+    display: flex;  /* 使用 flexbox 來並排顯示 <select> 和 <iframe> */
+    gap: 20px;  /* 設定間距 */
+    margin-top: 0;  /* 移除上邊距，讓它緊接著在 nav 下方 */
+    padding: 0;  /* 移除內邊距 */
+}
+
+/* 設定 select 的寬度 */
+.dropdown {
+    width: 100px;
+}
+
+iframe {
+    flex: 1;  /* 讓 iframe 佔據剩餘的空間 */
+    height: 570px;
+    border: 0;  /* 移除邊框 */
+    margin: 0;  /* 移除外邊距 */
+    padding: 0;  /* 移除內邊距 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 增加陰影效果 */
+    background-color: #FFF;
+}
+select {
+    width: 120px;  /* 設定 select 的寬度為 100px */
+}
+select {
+    width: 120px; /* 設定 select 的寬度為 120px */
+    padding: 10px 15px;
+    font-size: 1em;
+    color: #333;
+    background-color: #ffffff;
+    border: 2px solid #4CAF50; /* 綠色邊框 */
+    border-radius: 10px; /* 圓角邊框 */
+    outline: none; /* 移除選擇時的邊框 */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+    transition: all 0.3s ease; /* 增加過渡效果 */
+  }
+  
+  /* 懸停時的樣式 */
+  select:hover {
+    border-color: #45a049; /* 更深的綠色邊框 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 增加陰影 */
+  }
+  
+  /* 聚焦時的樣式 */
+  select:focus {
+    border-color: #008CBA; /* 藍色邊框 */
+    box-shadow: 0 4px 10px rgba(0, 140, 186, 0.4); /* 藍色陰影 */
+  }
+  
+  /* 讓下拉箭頭的顏色與選項背景更搭配 */
+  select option {
+    padding: 10px;
+    background-color: #ffffff;
+    color: #333;
+  }
+  
+  /* 針對選項 hover 的效果 */
+  select option:hover {
+    background-color: #f1f1f1;
+  }

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="indexcss.css">
+  <script>
+    // 需密碼才可登入
+    document.addEventListener("DOMContentLoaded", function() {
+      var correctPassword = "r54"; // 設定密碼
+      var enteredPassword = "";
+
+      while (enteredPassword !== correctPassword) {
+        enteredPassword = prompt("請輸入密碼：");
+
+        if (enteredPassword === null) { // 使用者按取消
+          alert("您必須輸入密碼才能進入！");
+          window.location.href = "https://www.google.com"; // 轉跳到其他網站
+          return;
+        } else if (enteredPassword !== correctPassword) {
+          alert("密碼錯誤，請重新輸入！");
+        }
+      }
+      alert("驗證成功，歡迎進入系統！");
+    });
+  </script>
+  
+  <script>
+    
+    // company→有用到的有→設備狀態、庫存查詢、巡補清單、商品管理
+    localStorage.setItem("company", "2000130");
+    // tonek→有用到的有→巡補清單、商品管理
+    localStorage.setItem("token", "A933021E-4179-479A-98DE-F8B4D9E90B28");
+
+    // 當選擇改變時觸發此函數
+    function saveCodeToLocalStorage(event) {
+      var selectedCode = event.target.value; // 取得選擇的值
+      if (selectedCode) {
+        localStorage.setItem("code", selectedCode); // 儲存到 localStorage
+        // console.log("已儲存 code: " + selectedCode); // 印出確認訊息
+      }
+    }
+    // 當頁面載入時設定事件監聽
+    window.onload = function() {
+      var selectElement = document.getElementById("codeSelect"); // 取得 select 元素
+      selectElement.addEventListener("change", saveCodeToLocalStorage); // 綁定 change 事件
+    }
+    // code→庫存查詢
+    // localStorage.setItem("code", "F638C62401B1FF");//第1台設備
+</script>
+</head>
+<body>
+  <nav>
+    <ul>
+        <li><a href="Announcement.html" target="content-frame">訊息公告</a></li>
+        <li><a href="DeviceStatus.html" target="content-frame">設備狀態</a></li>
+        <li><a href="StockCheck.html"target="content-frame">庫存查詢</a></li>
+        <li><a href="Patrol.html"target="content-frame">巡補清單</a></li>
+        <li><a href="Commodity.html"target="content-frame">商品管理</a></li>
+        <li><a href="RevenueDownload.html"target="content-frame">營收下載</a></li>
+        <li><a href="Ads.html"target="content-frame">廣告管理</a></li>
+        <li><a href="Pic.html"target="content-frame">背景管理</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+    <div class="dropdown">
+      <select id="codeSelect">
+        <option value="">設備編號</option>
+        <option value="F7D4C38412511A">日藥01</option>   
+        <option value="F7D4C56F112E3C">日藥02</option>
+        <option value="F7D4C3DA12A3A8">日藥03</option>
+        <option value="F638C56501A00A">日藥04 110V</option>
+        <option value="F638C49405968C">日藥05 110V</option>
+        <option value="option2">設備編號</option>
+      </select>
+    </div>
+    <iframe name="content-frame" src="Announcement.html"></iframe>
+  </div>
+</div>
+</body>
+</html>

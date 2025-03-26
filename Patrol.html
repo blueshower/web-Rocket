@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="PatrolCSS.css">
+    <script>
+        if (window.location !== window.parent.location) {
+          // 在 iframe 內，則不做任何跳轉
+        } else {
+          //被獨立開啟，導向 index.html
+          window.location.href = "index.html";
+        }
+      </script>
+    
+</head>
+<body>
+<div>
+     <button style="margin-left:150px;"id="button1">讀取</button> 
+</div>
+<div class="container">
+    <div class="column"> 
+        <div>系統編號
+            <input id="commodityID" type="text" value="" placeholder="系統資訊無需輸入" readonly><br>
+         </div>
+         <div>商品編號
+            <input id="commodityCode" type="text" value="" placeholder="8位-英、數、半形" pattern="[a-zA-Z0-9]*" maxlength="8" readonly><br>
+         </div>
+         <div>商品名稱
+            <input id="commodityName" type="text" value="" placeholder="10位-中、英、數、半形" pattern="[\u4e00-\u9fa5a-zA-Z0-9]*" maxlength="10" readonly 
+                   oninvalid="this.setCustomValidity('請輸入10位以內的中英文數字')">
+         </div>
+         <div>系統圖片
+            <input id="photo" type="text" value="" placeholder="系統回傳" readonly>
+        </div>
+    </div>
+
+    <div class="column1"> 
+        <div>巡補清單
+            <input id="order" type="text" value="" placeholder="10位-中、英、數、半形"pattern="[\u4e00-\u9fa5a-zA-Z0-9]*"maxlength="13">
+         </div>
+         <div>清單有效
+            <input id="deadline" type="datetime-local" value="" >
+            <span style="font-size: 16px;color:red;">中午12點為「下午」</span><br>
+         </div>
+        <div>保存期限
+            <input id="shelflife" type="datetime-local" value="" >
+            <span style="font-size: 16px;color:red;">中午12點為「下午」</span><br>
+         </div>
+         <div>商品數量
+            <input id="quantity" type="text" value="" placeholder="輸入數量"maxlength="3">
+         </div>
+    </div>
+</div>
+<div>
+    <button style="margin-left:150px;"id="restockButton">補貨</button>
+    <button onclick="clearForm()"style="margin-left:150px;">清空</button>
+</div>
+<hr>
+<div>
+<table id="responseData">
+    <thead>
+        <tr>
+            <th>系統編號</th>
+            <th>商品編號</th>
+            <th>商品類別</th>
+            <th>商品名稱</th>
+            <th>商品金額</th>
+            <th>商品內文</th>
+            <th>排序</th>
+            <th>規格</th>
+            <th>備註</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- 動態生成表格內容 -->
+    </tbody>
+</table>
+</div>
+<hr>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script>
+    const company = localStorage.getItem("company");//營運編號EX→2000043
+    const token = localStorage.getItem("token");//token
+    const code = localStorage.getItem("code");//設備編號EX→F638C62401B1FF
+    // console.log(company); 
+    // console.log(token); 
+    // const company = "2000043";
+    // const token = "E15B189E-E14C-497C-BF85-D4D20E8F7C73";
+    let currentCommodity = null;
+
+    // 通用的 SHA256 計算函式
+    async function calculateSHA256(input) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(input);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // 請求商品資料
+    async function fetchCommodities(hash) {
+        try {
+            const response = await axios.get('https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/Commodity.aspx', {
+                params: { company, sign: hash },
+            });
+            return response.data.commodity;
+        } catch (error) {
+            console.error(error);
+            alert('讀取商品資料失敗，請檢查網路或稍後重試！');
+        }
+    }
+    // 渲染表格內容
+    function renderTable(data) {
+        const tableBody = document.querySelector('#responseData tbody');
+        tableBody.innerHTML = '';
+
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            row.dataset.commodityCode = item.commodityCode; // 儲存商品編號
+            row.innerHTML = `
+                <td>${item.commodityID}</td>
+                <td>${item.commodityCode}</td>
+                <td>${item.commodityTypeName}</td>
+                <td>${item.commodityName}</td>
+                <td>${item.price}</td>
+                <td>${item.info1}</td>
+                <td>${item.index}</td>
+                <td>${item.spec}</td>
+                <td>${item.memo}</td>
+            `;
+            tableBody.appendChild(row);
+
+            // 點擊行顯示商品詳細資訊
+            row.addEventListener('click', () => {
+                currentCommodity = item;
+                document.querySelector('#commodityCode').value = item.commodityCode;
+                document.querySelector('#commodityID').value = item.commodityID;
+                document.querySelector('#commodityName').value = item.commodityName;
+                document.querySelector('#photo').value = item.photo;
+                currentCommodity.info1 = item.info1;
+                currentCommodity.url = item.url;
+                currentCommodity.spec = item.spec;
+            });
+        });
+    }
+    // 補貨請求函式
+    async function restockCommodity() {
+        if (!currentCommodity) {
+            alert('請先選擇一個商品！');
+            return;
+        }
+        const orderValue = document.querySelector('#order').value.trim(); // 取得輸入框的值
+    if (!orderValue) {
+        alert('請輸入巡補清單！');
+        return;
+    }
+    // 商品有效期限
+    const shelflifeInput = document.querySelector('#shelflife').value;
+    if (!shelflifeInput) {
+        alert('請選擇保存期限！');
+        return;
+    }
+    // 格式化時間為 "YYYY-MM-DD HH:MM:SS"
+    const shelflife = shelflifeInput.replace('T', ' ') + ':00';
+    // 清單有效時間
+    const deadlineInput = document.querySelector('#deadline').value;
+    if (!deadlineInput) {
+        alert('請選擇保存期限！');
+        return;
+    }
+    // 格式化時間為 "YYYY-MM-DD HH:MM:SS"
+    const deadline = deadlineInput.replace('T', ' ') + ':00';
+
+        const requestData = {
+            code:code,
+            commodity: [
+                {
+                    barcode: [
+                        // { paid: false, value: "5B377B1F-5F96-4705-9AAE-7C4E683B0ABF" },
+                        // { paid: false, value: "7753F290-DEEB-4D36-AE36-AED372F41B15" }
+                    ],
+                    brandName: currentCommodity.brandName || "品牌",
+                    commodityCode: currentCommodity.commodityCode,
+                    commodityName: currentCommodity.commodityName,
+                    commodityTypeName: currentCommodity.commodityTypeName || "商品類別",
+                    free: 20,
+                    photo: currentCommodity.photo || "",
+                    price: currentCommodity.price || 0,
+                    quantity: parseInt(document.querySelector('#quantity').value, 10) || 0, // 取得商品數量
+                    shelflife:shelflife,
+                    info1:currentCommodity.info1,
+                    url:currentCommodity.url,
+                    spec:currentCommodity.spec,
+                }
+            ],
+            order: orderValue,
+            deadline:deadline,
+            shop: "A001"
+        };
+
+        try {
+            const response = await axios.post('https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/Restock.aspx', requestData, {
+                params: {
+                    company,
+                    sign: await calculateSHA256(`company=${company}${token}`)
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (!response.data.message) {
+                alert("補貨成功！");
+            } else {
+                alert(response.data.message);
+            }
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+            alert('補貨失敗，請稍後重試！');
+        }
+    }
+
+    // 按鈕事件處理
+    document.querySelector('#button1').addEventListener('click', async () => {
+        const inputString = `company=${company}${token}`;
+        const hash = await calculateSHA256(inputString);
+        const commodities = await fetchCommodities(hash);
+        if (commodities) renderTable(commodities);
+    });
+    document.querySelector('#restockButton').addEventListener('click', restockCommodity);
+    // 清空輸入框的函式
+    function clearForm() {
+        location.reload();
+    }
+</script>
+</body>
+</html>

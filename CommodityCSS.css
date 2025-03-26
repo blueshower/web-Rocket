@@ -1,0 +1,118 @@
+button {
+    width: 100px;
+    height: 20px;
+    line-height: 15px;
+    padding: 1px;
+    background: #4d4d4d;
+    color: #FFFF00;
+    border-radius: 0 5px 0 5px;
+    font-weight: bold;
+}
+.fsize {
+    font-size: 12px;
+}
+
+input[type="text"] {
+    width: 200px;
+    padding: 5px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    transition: border 0.3s ease;
+}
+input[type="text"]:focus {
+    border-color: #FF0000;
+    outline: none;
+    background-color: #fff;
+}
+textarea[type="text"] {
+    width: 200px;
+    padding: 5px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    transition: border 0.3s ease;
+    resize: none;
+}
+textarea[type="text"]:focus {
+    border-color: #FF0000;
+    outline: none;
+    background-color: #fff;
+}
+hr {
+    border: none;
+    height: 2px;
+    background-color: #ccc;
+    margin: 10px 0;
+}
+.container {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    background-color: #DDDDDD;
+}
+.column { 
+    margin-left: 20px;
+    width: 300px; 
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+th {
+    background-color: #f2f2f2;
+}
+/* 奇數行的背景色 */
+tr:nth-child(odd) {
+    background-color: #DDDDDD;
+}
+/* 懸停時改變背景色 */
+tr:hover {
+    background-color: #f1f1f1;
+    border: 2px solid #FF0000;
+}
+a:hover{
+    background-color: yellow;
+}
+.div1 {
+    width: 250px;
+    height: auto;
+    padding: 5px;
+    border: 2px solid #00BBFF;
+    margin-left: 20px;
+}
+#fileInput {
+  width: 200px;
+  position: relative;
+  font-size: 16px;
+  padding: 10px;
+  border: 2px solid #a50818;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0897b3, #0b838c);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  outline: none;
+}
+
+#fileInput:hover {
+  background: linear-gradient(135deg, #0897b3, #0b838c);
+  box-shadow: 0px 4px 10px rgba(231, 114, 12, 0.417);
+}
+
+#fileInput:active {
+  transform: scale(0.98);
+}
+

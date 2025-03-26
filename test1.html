@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="MediaCSS.css">
+    
+</head>
+<body>
+    <div class="div1">
+        <div><h2 style="color: #FF0000;">廣告發佈</h2><br>
+            全版廣告
+            <input id="photo3" type="text" value="" placeholder="系統回傳" ><br>
+            半版廣告
+            <input id="photo4" type="text" value="" placeholder="系統回傳" >
+        </div><br>
+        <button id="UpdateAds">更新廣告</button><br>
+    </div>
+    
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+ <!-- 引入 CryptoJS 庫計算sha256 -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+ <script>
+    const company = localStorage.getItem("company"); // 營運編號
+    const token = localStorage.getItem("token"); // token
+    const code = localStorage.getItem("code"); // 設備編號
+    document.getElementById("UpdateAds").addEventListener("click", async function() {
+        const photo3 = document.getElementById("photo3").value;
+        const photo4 = document.getElementById("photo4").value;
+
+        if (!company || !token || !code || !photo3 || !photo4) {
+            alert("缺少必要的參數");
+            return;
+        }
+        
+        // 假設sign是SHA256加密後的字符串，您需要依照API的實際要求來計算簽名
+        const inputString = `code=${code}&company=${company}&image1=${photo3}&image2=${photo4}${token}`;
+        const sign = CryptoJS.SHA256(inputString).toString(CryptoJS.enc.Hex); // 計算SHA256
+        
+        const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/ProgramImage.aspx?code=${code}&company=${company}&image1=${photo3}&image2=${photo4}&sign=${sign}`;
+        
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            });
+
+            const result = await response.text();
+            console.log("API Response:", result);
+            alert("更新成功: " + result);
+        } catch (error) {
+            console.error("API Error:", error);
+            alert("請求失敗");
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="CommodityCSS.css">
+    <script>
+        if (window.location !== window.parent.location) {
+          // 在 iframe 內，則不做任何跳轉
+        } else {
+          //被獨立開啟，導向 index.html
+          window.location.href = "index.html";
+        }
+      </script>
+</head>
+<body>
+<div>設備商品管理 <button id="button1">讀取</button>
+</div>
+</div>
+<div class="container">
+    <div class="column"> 
+        <div>系統編號
+            <input id="commodityID" type="text" value="" placeholder="系統資訊無需輸入" readonly><br>
+         </div>
+         <div>商品編號
+            <input class="column" id="commodityCode" type="text" value="" placeholder="8位-英、數、半形"pattern="[\u9fa5a-zA-Z0-9\s]*" maxlength="8"><br>
+         </div>
+         <div>商品類別
+            <input id="commodityTypeName" type="text" value="" placeholder="10位-中、英、數、半形"pattern="[\u4e00-\u9fa5a-zA-Z0-9\s]*" maxlength="10"><br>
+         </div>
+         <div>商品名稱
+            <input id="commodityName" type="text" value="" placeholder="10位-中、英、數、半形"pattern="[\u4e00-\u9fa5a-zA-Z0-9\s]*" maxlength="10"><br>
+         </div>
+         <div>商品金額
+            <input id="price" type="text" value="" placeholder="5位-數字"pattern="[\0-9\s]*" maxlength="5"><br>
+         </div>
+        <div class="container">
+            商品資訊
+            <textarea type="text" name="" id="info1" rows="3" cols="30" placeholder="中、英、數、半形(40字內)"pattern="[\u4e00-\u9fa5a-zA-Z0-9\s]*" maxlength="40"></textarea>
+        </div>
+    </div>
+    <div class="column"> 
+        <div>
+            <label for="cars" type="text">排序</label>
+            <select id="index" name="cars"style="font-size: 16px;width: 50px;">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                </select><br>
+        </div>
+        <div>規格
+            <input id="spec" type="text" value="" placeholder="10位-中、英、數、半形"pattern="[\u4e00-\u9fa5a-zA-Z0-9\s]*" maxlength="10"><br>
+        </div>
+        <div>連結
+            <input id="url" type="text" value="" placeholder="短網址64字元內"maxlength="64">
+            <a style="font-size: 10px;" href="https://reurl.cc/main/tw" target="_blank">縮短網址</a><br>
+        </div>
+        <div>備註
+            <input id="memo" type="text" value="" placeholder="10位-中、英、數、半形"pattern="[\u4e00-\u9fa5a-zA-Z0-9\s]*" maxlength="10"><br>
+        </div>
+        <div>清空
+            <input id="stop" type="text" value="0" placeholder="數字"readonly><br>
+        </div>
+        <div>會員
+            <input id="vip" type="text" value="0" placeholder="數字"readonly><br>
+        </div>
+        <div>圖片
+            <input id="photo" type="text" value="" placeholder="系統回傳" readonly>
+        </div>
+    </div>
+    <div class="div1">
+        <div>
+            <input type="file" id="fileInput" accept="image/*">
+        </div><br>
+        <div>
+            <img id="uploadedImage" src="" alt="上傳縮圖" style="max-width: 50%; height: auto;"><br>
+            <label id="filesize" for=""></label>
+        </div>
+        <textarea id="base64Output" rows="10" cols="50" placeholder="Base64 編碼將顯示在此處" hidden></textarea>
+        <button id="uploadButton">上傳</button><br>
+        <label style="color: #FF0000;" for="">上傳圖檔時才會顯示縮圖</label><br>
+        <label style="color: #FF0000;" for="">圖檔為500x500px/PNG</label>
+    </div>
+</div>
+<br>
+<div style="margin-left:150px;">
+    <button id="addData">新增/修改</button>
+    <button onclick="clearForm()"style="margin-left:150px;">清空</button>
+    <span style="color: #FF0000; font-weight: bold;">當「商品編號」相同時為→修改，反之為新增</span>
+</div>
+<hr>
+<table id="responseData">
+    <thead>
+        <tr>
+            <th>系統編號</th>
+            <th>商品編號</th>
+            <th>商品類別</th>
+            <th>商品名稱</th>
+            <th>商品金額</th>
+            <th>商品內文</th>
+            <th>排序</th>
+            <th>規格</th>
+            <th>備註</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- 這裡將動態生成表格內容 -->
+    </tbody>
+</table>
+<hr>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script>
+    const company = localStorage.getItem("company");
+    const token = localStorage.getItem("token");
+    // console.log(company); 
+    // console.log(token); 
+    var currentCommodity = null;
+    //處理sha256並且串接api
+    async function SHA256(input) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(input);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    let inputString = "company=" + company + token;
+    const btn = document.querySelector('#button1');
+    btn.addEventListener('click', () => {
+        SHA256(inputString).then(hash => {
+            apirock05(hash);
+        });
+    });
+
+    function apirock05(hash) {
+        axios.get('https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/Commodity.aspx', {
+            params: {
+                company: company,
+                sign: hash,
+            }
+        })
+        .then(function (response) {
+            // console.log(response);
+            var tableBody = document.querySelector('#responseData tbody');
+            tableBody.innerHTML = '';
+            // 遍歷 API 回應的資料並動態生成表格內容
+            response.data.commodity.forEach(function (item) {
+                var row = document.createElement('tr');
+                row.dataset.commodityCode = item.commodityCode; // 使用 data-commodityCode 屬性來存儲每個 item 的唯一商品編號
+                row.innerHTML = `
+                    <td>${item.commodityID}</td>
+                    <td>${item.commodityCode}</td>
+                    <td>${item.commodityTypeName}</td>
+                    <td>${item.commodityName}</td>
+                    <td>${item.price}</td>
+                    <td>${item.info1}</td>
+                    <td>${item.index}</td>
+                    <td>${item.spec}</td>
+                    <td>${item.memo}</td>
+                `;
+                tableBody.appendChild(row);
+
+                row.addEventListener('click', function() {
+                    currentCommodity = item; // 設置當前選中的商品
+                    document.querySelector('#commodityCode').value = item.commodityCode;//商品編號
+                    document.querySelector('#commodityID').value = item.commodityID;//系統ID
+                    document.querySelector('#commodityTypeName').value = item.commodityTypeName;//商品類別
+                    document.querySelector('#commodityName').value = item.commodityName;//商品名稱
+                    document.querySelector('#price').value = item.price;//價格
+                    document.querySelector('#info1').value = item.info1;//商品資訊
+                    document.querySelector('#index').value = item.index;//排序
+                    document.querySelector('#spec').value = item.spec;//規格
+                    document.querySelector('#url').value = item.url;//網址
+                    document.querySelector('#memo').value = item.memo;//備註
+                    document.querySelector('#photo').value = item.photo;//圖片
+                });
+            });
+        })
+        .catch((error) => console.log(error));
+    }
+    //修改商品
+    document.getElementById('addData').addEventListener('click', async function() {
+        const inputString = "company=" + company + token;
+        const hash = await calculateSHA256(inputString);
+
+        // 初始化資料
+        let commodityData = {
+            "commodityID": document.querySelector('#commodityID').value,
+            "commodityCode": document.querySelector('#commodityCode').value,
+            "commodityTypeName": document.querySelector('#commodityTypeName').value,
+            "commodityName": document.querySelector('#commodityName').value,
+            "price": document.querySelector('#price').value,
+            "info1": document.querySelector('#info1').value,
+            "index": document.querySelector('#index').value,
+            "spec": document.querySelector('#spec').value,
+            "url": document.querySelector('#url').value,
+            "memo": document.querySelector('#memo').value,
+            "stop": document.querySelector('#stop').value,
+            "vip": document.querySelector('#vip').value,
+            "photo": document.querySelector('#photo').value,
+        };
+
+        // 決定是新增還是修改
+        // 新增
+        let apiEndpoint = 'https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/AddCommodity.aspx';
+        if (currentCommodity) {
+        // 修改
+            apiEndpoint = 'https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/UpdateCommodity.aspx';
+            commodityData.originalCommodityCode = currentCommodity.commodityCode; // 在修改時添加原始商品編號
+        }
+
+        axios.post(apiEndpoint, JSON.stringify(commodityData), {
+            params: {
+                company: company,
+                sign: hash,
+            }
+        })
+        .then(response => {
+            console.log('成功:', response.data);
+            currentCommodity = null; // 重置當前選中的商品
+            // 清空輸入框
+            clearForm();
+            // 新增或修改成功後重新讀取數據
+            SHA256(inputString).then(hash => {
+                apirock05(hash);
+            });
+        })
+        .catch(error => {
+            console.error('錯誤:', error);
+        });
+    });
+    // 清空輸入框的函式
+    function clearForm() {
+        document.querySelector('#commodityCode').value = '';
+        document.querySelector('#commodityID').value = '';
+        document.querySelector('#commodityTypeName').value = '';
+        document.querySelector('#commodityName').value = '';
+        document.querySelector('#price').value = '';
+        document.querySelector('#info1').value = '';
+        document.querySelector('#index').value = '0'; // 重置為預設值
+        document.querySelector('#spec').value = '';
+        document.querySelector('#url').value = '';
+        document.querySelector('#memo').value = '';
+        document.querySelector('#stop').value = '0'; // 重置為預設值
+        document.querySelector('#vip').value = '0'; // 重置為預設值
+        document.querySelector('#photo').value = '';
+    }
+
+    // 清空輸入框的函式
+    function clearForm() {
+        document.querySelector('#commodityCode').value = '';
+        document.querySelector('#commodityID').value = '';
+        document.querySelector('#commodityTypeName').value = '';
+        document.querySelector('#commodityName').value = '';
+        document.querySelector('#price').value = '';
+        document.querySelector('#info1').value = '';
+        document.querySelector('#index').value = '0'; // 重置為預設值
+        document.querySelector('#spec').value = '';
+        document.querySelector('#url').value = '';
+        document.querySelector('#memo').value = '';
+        document.querySelector('#stop').value = '0'; // 重置為預設值
+        document.querySelector('#vip').value = '0'; // 重置為預設值
+        document.querySelector('#photo').value = '';
+    }
+
+    async function calculateSHA256(input) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(input);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    //圖片上傳
+    document.getElementById('fileInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        // 檢查檔案大小
+        const fileSizeBytes = file.size;
+        const maxFileSizeBytes = 100 * 1024; // 100KB以位元組為單位
+        if (fileSizeBytes > maxFileSizeBytes) {
+            alert("檔案大小超過100KB");
+            return; // 檔案過大，停止後續處理
+        }
+
+        // 創建圖片對象以檢查尺寸
+        const img = new Image();
+        const objectURL = URL.createObjectURL(file);
+        img.onload = function() {
+            const imageWidth = img.width;
+            const imageHeight = img.height;
+            const requiredWidth = 500;  // 必須是 1080px 寬度
+            const requiredHeight = 500; // 必須是 1920px 高度
+
+            if (imageWidth !== requiredWidth || imageHeight !== requiredHeight) {
+                alert(`圖片尺寸必須為 ${requiredWidth}px x ${requiredHeight}px，當前尺寸為 ${imageWidth}px x ${imageHeight}px`);
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    let base64String = event.target.result;
+                    // 移除前綴部分
+                    base64String = base64String.replace(/^data:image\/(png|jpg|jpeg);base64,/, '');
+                    // 替換 / 為換行
+                    base64String = base64String.replace(/\//g, '/\n');
+                    
+                    // 顯示圖片和 Base64 字符串
+                    document.getElementById('uploadedImage').src = objectURL;
+                    document.getElementById('base64Output').textContent = base64String;
+                    document.getElementById('filesize').textContent = '檔案大小: ' + (fileSizeBytes / 1024).toFixed(2) + ' KB';
+                };
+                reader.readAsDataURL(file); // 讀取檔案
+            }
+        };
+        img.src = objectURL; // 開始載入圖片來檢查尺寸
+    }
+});
+
+
+    document.getElementById('uploadButton').addEventListener('click', async function() {
+        const base64String = document.getElementById('base64Output').value;
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        if (base64String && file) {
+            const nameWithExtension = file.name;  // 包含副檔名的檔案名稱
+            const name = nameWithExtension.substring(0, nameWithExtension.lastIndexOf('.')) || nameWithExtension; // 去除副檔名
+            const size = file.size;  // 使用上傳圖片的大小（位元組）
+            const type = "2";
+            const inputString = "company=" + company + "&name=" + name + "&size=" + size + "&type=" + type + token;
+            const hash = await calculateSHA256(inputString);
+            let payload = base64String;
+
+            axios.post('https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/Image.aspx', payload, {
+                maxBodyLength: Infinity,
+                params: {
+                    company: company,
+                    name: name,
+                    size: size,
+                    type: type,
+                    sign: hash,
+                }
+            })
+            .then(response => {
+                document.getElementById('photo').value = response.data.file;
+                alert('圖片上傳成功');
+            })
+            .catch(error => {
+                console.error('錯誤:', error);
+                alert('圖片上傳失敗');
+            });
+        } else {
+            alert('請先上傳圖片');
+        }
+    });
+</script>
+</body>
+</html>

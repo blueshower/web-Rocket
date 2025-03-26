@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>SHA256 計算器</title>
+</head>
+<body>
+  <button onclick="calculateSHA256()">計算 SHA256</button>
+
+  <!-- 引入 CryptoJS 庫計算sha256 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+  <script>
+    // 從 localStorage 取得數據
+    const company = localStorage.getItem("company") ;
+    const token = localStorage.getItem("token") ;
+    const code = localStorage.getItem("code") ;
+
+    // sign排列
+    const inputString = "code=" + code + "&company=" + company + token;
+    function calculateSHA256() {
+      // 使用 inputString 計算 SHA256
+      var sha256 = CryptoJS.SHA256(inputString).toString(CryptoJS.enc.Hex);
+      // 顯示計算結果
+      console.log(sha256);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+button {
+    width: 100px;
+    height: 20px;
+    line-height: 15px;
+    padding: 1px;
+    background: #4d4d4d;
+    color: #FFFF00;
+    border-radius: 0 5px 0 5px;
+    font-weight: bold;
+    display: block;         /* 讓按鈕作為區塊元素顯示 */
+    margin: 0 auto;         /* 左右自動居中 */
+  }
+  .container {
+    display: flex; /* 讓內部元素並排 */
+    justify-content: flex-start; /* 讓內容靠左對齊 */
+    gap: 20px; /* 設定間距 */
+  }
+    .div1 {
+      width: 225px;
+      height: 500px;
+      padding: 5px;
+      border: 2px solid #00BBFF;
+      margin-left: 20px;
+  }
+  #fileInput1,#fileInput2 {
+      width: 200px;
+      position: relative;
+      font-size: 12px;
+      padding: 10px;
+      border: 2px solid #a50818;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0897b3, #0b838c);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      outline: none;
+    }
+    
+  #fileInput1:hover,#fileInput2:hover {
+      background: linear-gradient(135deg, #0897b3, #0b838c);
+      box-shadow: 0px 4px 10px rgba(231, 114, 12, 0.417);
+    }
+    
+  #fileInput1:active,#fileInput2:active {
+      transform: scale(0.98);
+    }
+    #uploadedImage1,#uploadedImage2 {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%; /* 讓圖片寬度最多填滿容器 */
+      height: auto; /* 讓高度根據寬度自動調整，維持原比例 */
+      max-height: 200px; /* 設定最大高度，防止過大 */
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 2px solid red;
+  }
+  h2 {
+    margin: 0px;
+    color: #FF0000; /* 紅色 */
+    font-size: 28px; /* 設定字體大小 */
+    font-weight: bold; /* 加粗 */
+    text-align: center; /* 置中對齊 */
+    text-transform: uppercase; /* 轉換為大寫 */
+    font-family: "Arial", sans-serif; /* 設定字體 */
+  }
+  
+  
+    
+    

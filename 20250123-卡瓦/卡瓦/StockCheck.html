@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="StockCheckCSS.css">
+    <script>
+      if (window.location !== window.parent.location) {
+        // 在 iframe 內，則不做任何跳轉
+      } else {
+        //被獨立開啟，導向 index.html
+        window.location.href = "index.html";
+      }
+    </script>
+</head>
+<body>
+</p>
+<p></p>
+<div>設備庫存查詢</div>
+<!--以下是頁面-->
+<div class="container" style="width: 200px;">
+    <div class="column">
+        <div class="itemblue">庫存查詢
+            <span><button class="button" onclick="openFloatingWindow040o();calculateSHA256();apirock040o()">庫存</button></span>
+        </div>
+        <div id="deviceno1" class="itemblue fsize">編號：</div>  
+    </div>
+</div>
+<!--浮動視窗-->
+<div id="myFloatingWindow040o" class="floating-window">
+    <button class="closeButton fsize" onclick="closeFloatingWindow040o()">Close</button>
+    <div class="font-size: 20px;">即時庫存</div>
+    <div class="container">
+        <div class="column">
+            <div class="wfsize">格子:AA1</div>
+            <div id="api04-o-AA1-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AA1-2" class="wfsize">時效:</div>
+        </div>
+        <div class="column">
+            <div class="wfsize">格子:AA2</div>
+            <div id="api04-o-AA2-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AA2-2" class="wfsize">時效:</div>
+        </div>   
+        <div class="column">
+          <div class="wfsize">格子:AA3</div>
+          <div id="api04-o-AA3-1" class="wfsize">商品:</div>     
+          <div id="api04-o-AA3-2" class="wfsize">時效:</div>
+      </div>   
+      <div class="column">
+        <div class="wfsize">格子:AA4</div>
+        <div id="api04-o-AA4-1" class="wfsize">商品:</div>     
+        <div id="api04-o-AA4-2" class="wfsize">時效:</div>
+    </div>   
+    </div>
+    <div class="container">
+        <div class="column">
+            <div class="wfsize">格子:AB1</div>
+            <div id="api04-o-AB1-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AB1-2" class="wfsize">時效:</div>
+        </div>
+        <div class="column">
+            <div class="wfsize">格子:AB2</div>
+            <div id="api04-o-AB2-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AB2-2" class="wfsize">時效:</div>
+        </div>   
+        <div class="column">
+          <div class="wfsize">格子:AB3</div>
+          <div id="api04-o-AB3-1" class="wfsize">商品:</div>     
+          <div id="api04-o-AB3-2" class="wfsize">時效:</div>
+      </div>  
+      <div class="column">
+        <div class="wfsize">格子:AB4</div>
+        <div id="api04-o-AB4-1" class="wfsize">商品:</div>     
+        <div id="api04-o-AB4-2" class="wfsize">時效:</div>
+    </div>    
+    </div>
+    <div class="container">
+        <div class="column">
+            <div class="wfsize">格子:AC1</div>
+            <div id="api04-o-AC1-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AC1-2" class="wfsize">時效:</div>
+        </div>
+        <div class="column">
+            <div class="wfsize">格子:AC2</div>
+            <div id="api04-o-AC2-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AC2-2" class="wfsize">時效:</div>
+        </div>
+        <div class="column">
+          <div class="wfsize">格子:AC3</div>
+          <div id="api04-o-AC3-1" class="wfsize">商品:</div>     
+          <div id="api04-o-AC3-2" class="wfsize">時效:</div>
+      </div>
+      <div class="column">
+        <div class="wfsize">格子:AC4</div>
+        <div id="api04-o-AC4-1" class="wfsize">商品:</div>     
+        <div id="api04-o-AC4-2" class="wfsize">時效:</div>
+    </div>
+    </div>
+    <div class="container">
+        <div class="column">
+            <div class="wfsize">格子:AD1</div>
+            <div id="api04-o-AD1-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AD1-2" class="wfsize">時效:</div>
+        </div>
+        <div class="column">
+            <div class="wfsize">格子:AD2</div>
+            <div id="api04-o-AD2-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AD2-2" class="wfsize">時效:</div>
+        </div>      
+        <div class="column">
+          <div class="wfsize">格子:AD3</div>
+          <div id="api04-o-AD3-1" class="wfsize">商品:</div>     
+          <div id="api04-o-AD3-2" class="wfsize">時效:</div>
+      </div>      
+      <div class="column">
+        <div class="wfsize">格子:AD4</div>
+        <div id="api04-o-AD4-1" class="wfsize">商品:</div>     
+        <div id="api04-o-AD4-2" class="wfsize">時效:</div>
+    </div>      
+    </div>
+    <div class="container">
+        <div class="column">
+            <div class="wfsize">格子:AE1</div>
+            <div id="api04-o-AE1-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AE1-2" class="wfsize">時效:</div>
+        </div>
+        <div class="column">
+            <div class="wfsize">格子:AE2</div>
+            <div id="api04-o-AE2-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AE2-2" class="wfsize">時效:</div>
+        </div>    
+        <div class="column">
+          <div class="wfsize">格子:AE3</div>
+          <div id="api04-o-AE3-1" class="wfsize">商品:</div>     
+          <div id="api04-o-AE3-2" class="wfsize">時效:</div>
+      </div>    
+      <div class="column">
+        <div class="wfsize">格子:AE4</div>
+        <div id="api04-o-AE4-1" class="wfsize">商品:</div>     
+        <div id="api04-o-AE4-2" class="wfsize">時效:</div>
+    </div>    
+    </div>
+    <div class="container">
+        <div class="column">
+            <div class="wfsize">格子:AF1</div>
+            <div id="api04-o-AF1-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AF1-2" class="wfsize">時效:</div>
+        </div>
+        <div class="column">
+            <div class="wfsize">格子:AF2</div>
+            <div id="api04-o-AF2-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AF2-2" class="wfsize">時效:</div>
+        </div>      
+        <div class="column">
+          <div class="wfsize">格子:AF3</div>
+          <div id="api04-o-AF3-1" class="wfsize">商品:</div>     
+          <div id="api04-o-AF3-2" class="wfsize">時效:</div>
+      </div>    
+      <div class="column">
+        <div class="wfsize">格子:AF4</div>
+        <div id="api04-o-AF4-1" class="wfsize">商品:</div>     
+        <div id="api04-o-AF4-2" class="wfsize">時效:</div>
+    </div>      
+    </div>
+    <div class="container">
+        <div class="column">
+            <div class="wfsize">格子:AG1</div>
+            <div id="api04-o-AG1-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AG1-2" class="wfsize">時效:</div>
+        </div>
+        <div class="column">
+            <div class="wfsize">格子:AG2</div>
+            <div id="api04-o-AG2-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AG2-2" class="wfsize">時效:</div>
+        </div>      
+        <div class="column">
+          <div class="wfsize">格子:AG3</div>
+          <div id="api04-o-AG3-1" class="wfsize">商品:</div>     
+          <div id="api04-o-AG3-2" class="wfsize">時效:</div>
+      </div>    
+      <div class="column">
+        <div class="wfsize">格子:AG4</div>
+        <div id="api04-o-AG4-1" class="wfsize">商品:</div>     
+        <div id="api04-o-AG4-2" class="wfsize">時效:</div>
+    </div>      
+    </div>
+    <div class="container">
+        <div class="column">
+            <div class="wfsize">格子:AH1</div>
+            <div id="api04-o-AH1-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AH1-2" class="wfsize">時效:</div>
+        </div>
+        <div class="column">
+            <div class="wfsize">格子:AH2</div>
+            <div id="api04-o-AH2-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AH2-2" class="wfsize">時效:</div>
+        </div>      
+        <div class="column">
+          <div class="wfsize">格子:AH3</div>
+          <div id="api04-o-AH3-1" class="wfsize">商品:</div>     
+          <div id="api04-o-AH3-2" class="wfsize">時效:</div>
+      </div>    
+      <div class="column">
+        <div class="wfsize">格子:AH4</div>
+        <div id="api04-o-AH4-1" class="wfsize">商品:</div>     
+        <div id="api04-o-AH4-2" class="wfsize">時效:</div>
+    </div>      
+    </div>
+    <div class="container">
+        <div class="column">
+            <div class="wfsize">格子:AI1</div>
+            <div id="api04-o-AI1-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AI1-2" class="wfsize">時效:</div>
+        </div>
+        <div class="column">
+            <div class="wfsize">格子:AI2</div>
+            <div id="api04-o-AI2-1" class="wfsize">商品:</div>     
+            <div id="api04-o-AI2-2" class="wfsize">時效:</div>
+        </div>      
+        <div class="column">
+          <div class="wfsize">格子:AI3</div>
+          <div id="api04-o-AI3-1" class="wfsize">商品:</div>     
+          <div id="api04-o-AI3-2" class="wfsize">時效:</div>
+      </div>    
+      <div class="column">
+        <div class="wfsize">格子:AI4</div>
+        <div id="api04-o-AI4-1" class="wfsize">商品:</div>     
+        <div id="api04-o-AI4-2" class="wfsize">時效:</div>
+    </div>      
+    </div>
+  </div>
+  
+<hr>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ <!-- 引入 CryptoJS 庫計算sha256 -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script>
+    function openFloatingWindow040o() {
+      var floatingWindow = document.getElementById('myFloatingWindow040o');
+      floatingWindow.style.display = 'block';
+    }
+    function closeFloatingWindow040o() {
+      var floatingWindow = document.getElementById('myFloatingWindow040o');
+      floatingWindow.style.display = 'none';
+    }
+    </script>
+<script>
+  // 外部取得company與token
+  const company = localStorage.getItem("company");//營運編號EX→2000043
+  const token = localStorage.getItem("token");//token
+  const code = localStorage.getItem("code");//設備編號EX→F638C62401B1FF
+  document.getElementById("deviceno1").innerHTML="設備編號："+code;
+    //取得現在時間↓ nowtime9
+    const nowtimeo= new Date();
+    // sign排列
+    const inputString = "code=" + code + "&company=" + company + token;
+    function calculateSHA256() {
+      var sha256 = CryptoJS.SHA256(inputString).toString(CryptoJS.enc.Hex);
+      // console.log(sha256);//顯示計算結果
+      apirock040o(sha256);
+    }
+    async function apirock040o(hashValue){
+    axios.get('https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/MachineCommodity.aspx',
+    {
+      params:{
+      code:code,
+      company:company,
+      sign:hashValue
+      }
+    })
+    .then(function(response){
+        // console.log(response)
+        let apiArray = response.data.commodity;
+        //AA1格子
+      let AA1 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AA1') {
+            AA1.push(apiArray[i]);}
+          }
+      if (AA1.length==0) {
+              document.querySelector("#api04-o-AA1-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AA1-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AA1-1").style.color = "red";
+              document.querySelector("#api04-o-AA1-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AA1-1").innerHTML="商品:"  + AA1[0].name;
+              document.querySelector("#api04-o-AA1-2").innerHTML="時效:"  + AA1[0].shelflife;
+              let shelflifeAA1 = new Date(AA1[0].shelflife)
+      if (nowtimeo> shelflifeAA1) { 
+          document.querySelector("#api04-o-AA1-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AA1-2").style.color = "red";
+         }}
+      //AA2格子
+      let AA2 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AA2') {
+            AA2.push(apiArray[i]);}
+          }
+      if (AA2.length==0) {
+              document.querySelector("#api04-o-AA2-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AA2-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AA2-1").style.color = "red";
+              document.querySelector("#api04-o-AA2-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AA2-1").innerHTML="商品:"  + AA2[0].name;
+              document.querySelector("#api04-o-AA2-2").innerHTML="時效:"  + AA2[0].shelflife;
+              let shelflifeAA2 = new Date(AA2[0].shelflife)
+      if (nowtimeo> shelflifeAA2) { 
+          document.querySelector("#api04-o-AA2-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AA2-2").style.color = "red";
+         }}
+      //AA3格子
+      let AA3 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AA3') {
+            AA3.push(apiArray[i]);}
+          }
+      if (AA3.length==0) {
+              document.querySelector("#api04-o-AA3-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AA3-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AA3-1").style.color = "red";
+              document.querySelector("#api04-o-AA3-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AA3-1").innerHTML="商品:"  + AA3[0].name;
+              document.querySelector("#api04-o-AA3-2").innerHTML="時效:"  + AA3[0].shelflife;
+              let shelflifeAA3 = new Date(AA3[0].shelflife)
+      if (nowtimeo> shelflifeAA3) { 
+          document.querySelector("#api04-o-AA3-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AA3-2").style.color = "red";
+         }}
+      //AA4格子
+      let AA4 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AA4') {
+            AA4.push(apiArray[i]);}
+          }
+      if (AA4.length==0) {
+              document.querySelector("#api04-o-AA4-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AA4-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AA4-1").style.color = "red";
+              document.querySelector("#api04-o-AA4-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AA4-1").innerHTML="商品:"  + AA4[0].name;
+              document.querySelector("#api04-o-AA4-2").innerHTML="時效:"  + AA4[0].shelflife;
+              let shelflifeAA4 = new Date(AA4[0].shelflife)
+      if (nowtimeo> shelflifeAA4) { 
+          document.querySelector("#api04-o-AA4-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AA4-2").style.color = "red";
+         }}
+      //AB1格子
+      let AB1 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AB1') {
+            AB1.push(apiArray[i]);}
+          }
+      if (AB1.length==0) {
+              document.querySelector("#api04-o-AB1-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AB1-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AB1-1").style.color = "red";
+              document.querySelector("#api04-o-AB1-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AB1-1").innerHTML="商品:"  + AB1[0].name;
+              document.querySelector("#api04-o-AB1-2").innerHTML="時效:"  + AB1[0].shelflife;
+              let shelflifeAB1 = new Date(AB1[0].shelflife)
+      if (nowtimeo> shelflifeAB1) { 
+          document.querySelector("#api04-o-AB1-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AB1-2").style.color = "red";
+         }}
+      //AB2格子
+      let AB2 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AB2') {
+            AB2.push(apiArray[i]);}
+          }
+      if (AB2.length==0) {
+              document.querySelector("#api04-o-AB2-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AB2-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AB2-1").style.color = "red";
+              document.querySelector("#api04-o-AB2-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AB2-1").innerHTML="商品:"  + AB2[0].name;
+              document.querySelector("#api04-o-AB2-2").innerHTML="時效:"  + AB2[0].shelflife;
+              let shelflifeAB2 = new Date(AB2[0].shelflife)
+      if (nowtimeo> shelflifeAB2) { 
+          document.querySelector("#api04-o-AB2-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AB2-2").style.color = "red";
+         }}
+      //AB3格子
+      let AB3 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AB3') {
+            AB3.push(apiArray[i]);}
+          }
+      if (AB3.length==0) {
+              document.querySelector("#api04-o-AB3-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AB3-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AB3-1").style.color = "red";
+              document.querySelector("#api04-o-AB3-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AB3-1").innerHTML="商品:"  + AB3[0].name;
+              document.querySelector("#api04-o-AB3-2").innerHTML="時效:"  + AB3[0].shelflife;
+              let shelflifeAB3 = new Date(AB3[0].shelflife)
+      if (nowtimeo> shelflifeAB3) { 
+          document.querySelector("#api04-o-AB3-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AB3-2").style.color = "red";
+         }}
+      //AB4格子
+      let AB4 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AB4') {
+            AB4.push(apiArray[i]);}
+          }
+      if (AB4.length==0) {
+              document.querySelector("#api04-o-AB4-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AB4-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AB4-1").style.color = "red";
+              document.querySelector("#api04-o-AB4-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AB4-1").innerHTML="商品:"  + AB4[0].name;
+              document.querySelector("#api04-o-AB4-2").innerHTML="時效:"  + AB4[0].shelflife;
+              let shelflifeAB4 = new Date(AB4[0].shelflife)
+      if (nowtimeo> shelflifeAB4) { 
+          document.querySelector("#api04-o-AB4-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AB4-2").style.color = "red";
+         }}
+      //AC1格子
+      let AC1 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AC1') {
+            AC1.push(apiArray[i]);}
+          }
+      if (AC1.length==0) {
+              document.querySelector("#api04-o-AC1-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AC1-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AC1-1").style.color = "red";
+              document.querySelector("#api04-o-AC1-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AC1-1").innerHTML="商品:"  + AC1[0].name;
+              document.querySelector("#api04-o-AC1-2").innerHTML="時效:"  + AC1[0].shelflife;
+              let shelflifeAC1 = new Date(AC1[0].shelflife)
+      if (nowtimeo> shelflifeAC1) { 
+          document.querySelector("#api04-o-AC1-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AC1-2").style.color = "red";
+         }}
+      //AC2格子
+      let AC2 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AC2') {
+            AC2.push(apiArray[i]);}
+          }
+      if (AC2.length==0) {
+              document.querySelector("#api04-o-AC2-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AC2-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AC2-1").style.color = "red";
+              document.querySelector("#api04-o-AC2-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AC2-1").innerHTML="商品:"  + AC2[0].name;
+              document.querySelector("#api04-o-AC2-2").innerHTML="時效:"  + AC2[0].shelflife;
+              let shelflifeAC2 = new Date(AC2[0].shelflife)
+      if (nowtimeo> shelflifeAC2) { 
+          document.querySelector("#api04-o-AC2-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AC2-2").style.color = "red";
+         }}
+      //AC3格子
+      let AC3 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AC3') {
+            AC3.push(apiArray[i]);}
+          }
+      if (AC3.length==0) {
+              document.querySelector("#api04-o-AC3-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AC3-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AC3-1").style.color = "red";
+              document.querySelector("#api04-o-AC3-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AC3-1").innerHTML="商品:"  + AC3[0].name;
+              document.querySelector("#api04-o-AC3-2").innerHTML="時效:"  + AC3[0].shelflife;
+              let shelflifeAC3 = new Date(AC3[0].shelflife)
+      if (nowtimeo> shelflifeAC3) { 
+          document.querySelector("#api04-o-AC3-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AC3-2").style.color = "red";
+         }}
+      //AC4貨道
+      let AC4 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AC4') {
+            AC4.push(apiArray[i]);}
+          }
+      if (AC4.length==0) {
+              document.querySelector("#api04-o-AC4-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AC4-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AC4-1").style.color = "red";
+              document.querySelector("#api04-o-AC4-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AC4-1").innerHTML="商品:"  + AC4[0].name;
+              document.querySelector("#api04-o-AC4-2").innerHTML="時效:"  + AC4[0].shelflife;
+              let shelflifeAC4 = new Date(AC4[0].shelflife)
+      if (nowtimeo> shelflifeAC4) { 
+          document.querySelector("#api04-o-AC4-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AC4-2").style.color = "red";
+         }}
+      //AD1格子
+      let AD1 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AD1') {
+            AD1.push(apiArray[i]);}
+          }
+      if (AD1.length==0) {
+              document.querySelector("#api04-o-AD1-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AD1-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AD1-1").style.color = "red";
+              document.querySelector("#api04-o-AD1-2").style.color = "red";
+          }else{
+              document.querySelector("#api04-o-AD1-1").innerHTML="商品:"  + AD1[0].name;
+              document.querySelector("#api04-o-AD1-2").innerHTML="時效:"  + AD1[0].shelflife;
+              let shelflifeAD1 = new Date(AD1[0].shelflife)
+      if (nowtimeo> shelflifeAD1) { 
+          document.querySelector("#api04-o-AD1-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AD1-2").style.color = "red";
+         }}
+      //AD2格子
+      let AD2 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AD2') {
+            AD2.push(apiArray[i]);}
+          } 
+      if (AD2.length==0) {
+              document.querySelector("#api04-o-AD2-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AD2-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AD2-1").style.color = "red";
+              document.querySelector("#api04-o-AD2-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AD2-1").innerHTML="商品:"  + AD2[0].name;
+          document.querySelector("#api04-o-AD2-2").innerHTML="時效:"  + AD2[0].shelflife;
+          let shelflifeAD2 = new Date(AD2[0].shelflife)
+      if (nowtimeo> shelflifeAD2) { 
+          document.querySelector("#api04-o-AD2-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AD2-2").style.color = "red";
+      }}
+      //AD3格子
+      let AD3 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AD3') {
+            AD3.push(apiArray[i]);}
+          } 
+      if (AD3.length==0) {
+              document.querySelector("#api04-o-AD3-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AD3-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AD3-1").style.color = "red";
+              document.querySelector("#api04-o-AD3-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AD3-1").innerHTML="商品:"  + AD3[0].name;
+          document.querySelector("#api04-o-AD3-2").innerHTML="時效:"  + AD3[0].shelflife;
+          let shelflifeAD3 = new Date(AD3[0].shelflife)
+      if (nowtimeo> shelflifeAD3) { 
+          document.querySelector("#api04-o-AD3-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AD3-2").style.color = "red";
+      }}
+      //AD4格子
+      let AD4 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AD4') {
+            AD4.push(apiArray[i]);}
+          } 
+      if (AD4.length==0) {
+              document.querySelector("#api04-o-AD4-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AD4-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AD4-1").style.color = "red";
+              document.querySelector("#api04-o-AD4-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AD4-1").innerHTML="商品:"  + AD4[0].name;
+          document.querySelector("#api04-o-AD4-2").innerHTML="時效:"  + AD4[0].shelflife;
+          let shelflifeAD4 = new Date(AD4[0].shelflife)
+      if (nowtimeo> shelflifeAD4) { 
+          document.querySelector("#api04-o-AD4-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AD4-2").style.color = "red";
+      }}
+      //AE1格子
+      let AE1 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AE1') {
+            AE1.push(apiArray[i]);}
+          } 
+      if (AE1.length==0) {
+              document.querySelector("#api04-o-AE1-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AE1-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AE1-1").style.color = "red";
+              document.querySelector("#api04-o-AE1-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AE1-1").innerHTML="商品:"  + AE1[0].name;
+          document.querySelector("#api04-o-AE1-2").innerHTML="時效:"  + AE1[0].shelflife;
+          let shelflifeAE1 = new Date(AE1[0].shelflife)
+      if (nowtimeo> shelflifeAE1) { 
+          document.querySelector("#api04-o-AE1-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AE1-2").style.color = "red";
+      }}
+      //AE2格子
+      let AE2 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AE2') {
+            AE2.push(apiArray[i]);}
+          } 
+      if (AE2.length==0) {
+              document.querySelector("#api04-o-AE2-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AE2-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AE2-1").style.color = "red";
+              document.querySelector("#api04-o-AE2-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AE2-1").innerHTML="商品:"  + AE2[0].name;
+          document.querySelector("#api04-o-AE2-2").innerHTML="時效:"  + AE2[0].shelflife;
+          let shelflifeAE2 = new Date(AE2[0].shelflife)
+      if (nowtimeo> shelflifeAE2) { 
+          document.querySelector("#api04-o-AE2-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AE2-2").style.color = "red";
+      }}
+      //AE3格子
+      let AE3 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AE3') {
+            AE3.push(apiArray[i]);}
+          } 
+      if (AE3.length==0) {
+              document.querySelector("#api04-o-AE3-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AE3-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AE3-1").style.color = "red";
+              document.querySelector("#api04-o-AE3-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AE3-1").innerHTML="商品:"  + AE3[0].name;
+          document.querySelector("#api04-o-AE3-2").innerHTML="時效:"  + AE3[0].shelflife;
+          let shelflifeAE3 = new Date(AE3[0].shelflife)
+      if (nowtimeo> shelflifeAE3) { 
+          document.querySelector("#api04-o-AE3-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AE3-2").style.color = "red";
+      }}
+      //AE4格子
+      let AE4 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AE4') {
+            AE4.push(apiArray[i]);}
+          } 
+      if (AE4.length==0) {
+              document.querySelector("#api04-o-AE4-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AE4-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AE4-1").style.color = "red";
+              document.querySelector("#api04-o-AE4-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AE4-1").innerHTML="商品:"  + AE4[0].name;
+          document.querySelector("#api04-o-AE4-2").innerHTML="時效:"  + AE4[0].shelflife;
+          let shelflifeAE4 = new Date(AE4[0].shelflife)
+      if (nowtimeo> shelflifeAE4) { 
+          document.querySelector("#api04-o-AE4-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AE4-2").style.color = "red";
+      }}
+      //AF1格子
+      let AF1 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AF1') {
+            AF1.push(apiArray[i]);}
+          } 
+      if (AF1.length==0) {
+              document.querySelector("#api04-o-AF1-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AF1-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AF1-1").style.color = "red";
+              document.querySelector("#api04-o-AF1-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AF1-1").innerHTML="商品:"  + AF1[0].name;
+          document.querySelector("#api04-o-AF1-2").innerHTML="時效:"  + AF1[0].shelflife;
+          let shelflifeAF1 = new Date(AF1[0].shelflife)
+      if (nowtimeo> shelflifeAF1) { 
+          document.querySelector("#api04-o-AF1-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AF1-2").style.color = "red";
+      }}
+      //AF2格子
+      let AF2 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AF2') {
+            AF2.push(apiArray[i]);}
+          } 
+      if (AF2.length==0) {
+              document.querySelector("#api04-o-AF2-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AF2-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AF2-1").style.color = "red";
+              document.querySelector("#api04-o-AF2-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AF2-1").innerHTML="商品:"  + AF2[0].name;
+          document.querySelector("#api04-o-AF2-2").innerHTML="時效:"  + AF2[0].shelflife;
+          let shelflifeAF2 = new Date(AF2[0].shelflife)
+      if (nowtimeo> shelflifeAF2) { 
+          document.querySelector("#api04-o-AF2-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AF2-2").style.color = "red";
+      }}
+      //AF3格子
+      let AF3 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AF3') {
+            AF3.push(apiArray[i]);}
+          } 
+      if (AF3.length==0) {
+              document.querySelector("#api04-o-AF3-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AF3-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AF3-1").style.color = "red";
+              document.querySelector("#api04-o-AF3-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AF3-1").innerHTML="商品:"  + AF3[0].name;
+          document.querySelector("#api04-o-AF3-2").innerHTML="時效:"  + AF3[0].shelflife;
+          let shelflifeAF3 = new Date(AF3[0].shelflife)
+      if (nowtimeo> shelflifeAF3) { 
+          document.querySelector("#api04-o-AF3-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AF3-2").style.color = "red";
+      }}
+      //AF4格子
+      let AF4 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AF4') {
+            AF4.push(apiArray[i]);}
+          } 
+      if (AF4.length==0) {
+              document.querySelector("#api04-o-AF4-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AF4-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AF4-1").style.color = "red";
+              document.querySelector("#api04-o-AF4-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AF4-1").innerHTML="商品:"  + AF4[0].name;
+          document.querySelector("#api04-o-AF4-2").innerHTML="時效:"  + AF4[0].shelflife;
+          let shelflifeAF4 = new Date(AF4[0].shelflife)
+      if (nowtimeo> shelflifeAF4) { 
+          document.querySelector("#api04-o-AF4-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AF4-2").style.color = "red";
+      }}
+      //AG1格子
+      let AG1 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AG1') {
+            AG1.push(apiArray[i]);}
+          } 
+      if (AG1.length==0) {
+              document.querySelector("#api04-o-AG1-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AG1-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AG1-1").style.color = "red";
+              document.querySelector("#api04-o-AG1-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AG1-1").innerHTML="商品:"  + AG1[0].name;
+          document.querySelector("#api04-o-AG1-2").innerHTML="時效:"  + AG1[0].shelflife;
+          let shelflifeAG1 = new Date(AG1[0].shelflife)
+      if (nowtimeo> shelflifeAG1) { 
+          document.querySelector("#api04-o-AG1-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AG1-2").style.color = "red";
+      }}
+      //AG2格子
+      let AG2 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AG2') {
+            AG2.push(apiArray[i]);}
+          } 
+      if (AG2.length==0) {
+              document.querySelector("#api04-o-AG2-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AG2-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AG2-1").style.color = "red";
+              document.querySelector("#api04-o-AG2-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AG2-1").innerHTML="商品:"  + AG2[0].name;
+          document.querySelector("#api04-o-AG2-2").innerHTML="時效:"  + AG2[0].shelflife;
+          let shelflifeAG2 = new Date(AG2[0].shelflife)
+      if (nowtimeo> shelflifeAG2) { 
+          document.querySelector("#api04-o-AG2-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AG2-2").style.color = "red";
+      }}
+      //AG3格子
+      let AG3 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AG3') {
+            AG3.push(apiArray[i]);}
+          } 
+      if (AG3.length==0) {
+              document.querySelector("#api04-o-AG3-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AG3-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AG3-1").style.color = "red";
+              document.querySelector("#api04-o-AG3-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AG3-1").innerHTML="商品:"  + AG3[0].name;
+          document.querySelector("#api04-o-AG3-2").innerHTML="時效:"  + AG3[0].shelflife;
+          let shelflifeAG3 = new Date(AG3[0].shelflife)
+      if (nowtimeo> shelflifeAG3) { 
+          document.querySelector("#api04-o-AG3-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AG3-2").style.color = "red";
+      }}
+      //AG4格子
+      let AG4 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AG4') {
+            AG4.push(apiArray[i]);}
+          } 
+      if (AG4.length==0) {
+              document.querySelector("#api04-o-AG4-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AG4-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AG4-1").style.color = "red";
+              document.querySelector("#api04-o-AG4-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AG4-1").innerHTML="商品:"  + AG4[0].name;
+          document.querySelector("#api04-o-AG4-2").innerHTML="時效:"  + AG4[0].shelflife;
+          let shelflifeAG4 = new Date(AG4[0].shelflife)
+      if (nowtimeo> shelflifeAG4) { 
+          document.querySelector("#api04-o-AG4-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AG4-2").style.color = "red";
+      }}
+      //AH1格子
+      let AH1 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AH1') {
+            AH1.push(apiArray[i]);}
+          } 
+      if (AH1.length==0) {
+              document.querySelector("#api04-o-AH1-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AH1-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AH1-1").style.color = "red";
+              document.querySelector("#api04-o-AH1-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AH1-1").innerHTML="商品:"  + AH1[0].name;
+          document.querySelector("#api04-o-AH1-2").innerHTML="時效:"  + AH1[0].shelflife;
+          let shelflifeAH1 = new Date(AH1[0].shelflife)
+      if (nowtimeo> shelflifeAH1) { 
+          document.querySelector("#api04-o-AH1-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AH1-2").style.color = "red";
+      }}
+      //AH2格子
+      let AH2 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AH2') {
+            AH2.push(apiArray[i]);}
+          } 
+      if (AH2.length==0) {
+              document.querySelector("#api04-o-AH2-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AH2-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AH2-1").style.color = "red";
+              document.querySelector("#api04-o-AH2-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AH2-1").innerHTML="商品:"  + AH2[0].name;
+          document.querySelector("#api04-o-AH2-2").innerHTML="時效:"  + AH2[0].shelflife;
+          let shelflifeAH2 = new Date(AH2[0].shelflife)
+      if (nowtimeo> shelflifeAH2) { 
+          document.querySelector("#api04-o-AH2-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AH2-2").style.color = "red";
+      }}
+      //AH3格子
+      let AH3 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AH3') {
+            AH3.push(apiArray[i]);}
+          } 
+      if (AH3.length==0) {
+              document.querySelector("#api04-o-AH3-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AH3-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AH3-1").style.color = "red";
+              document.querySelector("#api04-o-AH3-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AH3-1").innerHTML="商品:"  + AH3[0].name;
+          document.querySelector("#api04-o-AH3-2").innerHTML="時效:"  + AH3[0].shelflife;
+          let shelflifeAH3 = new Date(AH3[0].shelflife)
+      if (nowtimeo> shelflifeAH3) { 
+          document.querySelector("#api04-o-AH3-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AH3-2").style.color = "red";
+      }}
+      //AH4格子
+      let AH4 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AH4') {
+            AH4.push(apiArray[i]);}
+          } 
+      if (AH4.length==0) {
+              document.querySelector("#api04-o-AH4-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AH4-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AH4-1").style.color = "red";
+              document.querySelector("#api04-o-AH4-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AH4-1").innerHTML="商品:"  + AH4[0].name;
+          document.querySelector("#api04-o-AH4-2").innerHTML="時效:"  + AH4[0].shelflife;
+          let shelflifeAH4 = new Date(AH4[0].shelflife)
+      if (nowtimeo> shelflifeAH4) { 
+          document.querySelector("#api04-o-AH4-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AH4-2").style.color = "red";
+      }}
+      //AI1格子
+      let AI1 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AI1') {
+            AI1.push(apiArray[i]);}
+          } 
+      if (AI1.length==0) {
+              document.querySelector("#api04-o-AI1-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AI1-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AI1-1").style.color = "red";
+              document.querySelector("#api04-o-AI1-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AI1-1").innerHTML="商品:"  + AI1[0].name;
+          document.querySelector("#api04-o-AI1-2").innerHTML="時效:"  + AI1[0].shelflife;
+          let shelflifeAI1 = new Date(AI1[0].shelflife)
+      if (nowtimeo> shelflifeAI1) { 
+          document.querySelector("#api04-o-AI1-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AI1-2").style.color = "red";
+      }}
+      //AI2格子
+      let AI2 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AI2') {
+            AI2.push(apiArray[i]);}
+          } 
+      if (AI2.length==0) {
+              document.querySelector("#api04-o-AI2-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AI2-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AI2-1").style.color = "red";
+              document.querySelector("#api04-o-AI2-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AI2-1").innerHTML="商品:"  + AI2[0].name;
+          document.querySelector("#api04-o-AI2-2").innerHTML="時效:"  + AI2[0].shelflife;
+          let shelflifeAI2 = new Date(AI2[0].shelflife)
+      if (nowtimeo> shelflifeAI2) { 
+          document.querySelector("#api04-o-AI2-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AI2-2").style.color = "red";
+      }}
+      //AI3格子
+      let AI3 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AI3') {
+            AI3.push(apiArray[i]);}
+          } 
+      if (AI3.length==0) {
+              document.querySelector("#api04-o-AI3-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AI3-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AI3-1").style.color = "red";
+              document.querySelector("#api04-o-AI3-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AI3-1").innerHTML="商品:"  + AI3[0].name;
+          document.querySelector("#api04-o-AI3-2").innerHTML="時效:"  + AI3[0].shelflife;
+          let shelflifeAI3 = new Date(AI3[0].shelflife)
+      if (nowtimeo> shelflifeAI3) { 
+          document.querySelector("#api04-o-AI3-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AI3-2").style.color = "red";
+      }}
+      //AI4格子
+      let AI4 = [];
+        for (let i = 0; i < apiArray.length; i++) {
+          if (apiArray[i].layer === 'AI4') {
+            AI4.push(apiArray[i]);}
+          } 
+      if (AI4.length==0) {
+              document.querySelector("#api04-o-AI4-1").innerHTML="商品:售完"  
+              document.querySelector("#api04-o-AI4-2").innerHTML="時效:售完"  
+              document.querySelector("#api04-o-AI4-1").style.color = "red";
+              document.querySelector("#api04-o-AI4-2").style.color = "red";
+      }else{
+          document.querySelector("#api04-o-AI4-1").innerHTML="商品:"  + AI4[0].name;
+          document.querySelector("#api04-o-AI4-2").innerHTML="時效:"  + AI4[0].shelflife;
+          let shelflifeAI4 = new Date(AI4[0].shelflife)
+      if (nowtimeo> shelflifeAI4) { 
+          document.querySelector("#api04-o-AI4-2").innerHTML="時效:過期" ;
+          document.querySelector("#api04-o-AI4-2").style.color = "red";
+      }}
+      })
+      .catch( (error) => console.log(error));
+  }
+  </script>
+
+  </script>      
+</body>
+</html>

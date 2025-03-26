@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="AnnouncementCSS.css">
+    <script>
+        if (window.location !== window.parent.location) {
+          // 在 iframe 內，則不做任何跳轉
+        } else {
+          //被獨立開啟，導向 index.html
+          window.location.href = "index.html";
+        }
+      </script>
+</head>
+<body>
+    <img src="./images/立展興.png" alt="立展興">
+    <p>訊息公告</p>
+    <a target="_blank" href="https://cors-anywhere.herokuapp.com/">點我開啟cors</a><br>
+</body>
+</html>

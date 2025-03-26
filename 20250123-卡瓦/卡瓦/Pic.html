@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="PicCss.css">
+    <script>
+        if (window.location !== window.parent.location) {
+          // 在 iframe 內，則不做任何跳轉
+        } else {
+          //被獨立開啟，導向 index.html
+          window.location.href = "index.html";
+        }
+      </script>
+</head>
+<body>
+<div class="container">
+    <div class="div1">
+        <div><h2>背景圖片</h2>
+            <input type="file" id="fileInput1" accept="image/*">
+        </div><br>
+        <div>
+            <img id="uploadedImage1" src="" alt="縮圖顯示"><br>
+            <label id="filesize1" for=""></label>
+        </div>
+        <textarea id="base64Output1" rows="10" cols="50" placeholder="Base64 編碼將顯示在此處" hidden></textarea>
+        <button id="uploadButton1">上傳</button><br>
+        <label style="color: #FF0000;" for="">上傳圖檔時才會顯示縮圖</label><br>
+        <label style="color: #FF0000;" for="">圖檔為1080x1902px/PNG</label>
+        <div>圖片
+            <input id="photo1" type="text" value="" placeholder="系統回傳" readonly>
+        </div>
+    </div>
+    <div class="div1">
+        <div><h2>出貨圖片</h2>
+            <input type="file" id="fileInput2" accept="image/*">
+        </div><br>
+        <div>
+            <img id="uploadedImage2" src="" alt="縮圖顯示"><br>
+            <label id="filesize2" for=""></label>
+        </div>
+        <textarea id="base64Output2" rows="10" cols="50" placeholder="Base64 編碼將顯示在此處" hidden></textarea>
+        <button id="uploadButton2">上傳</button><br>
+        <label style="color: #FF0000;" for="">上傳圖檔時才會顯示縮圖</label><br>
+        <label style="color: #FF0000;" for="">圖檔為1080x1902px/PNG</label>
+        <div>圖片
+            <input id="photo2" type="text" value="" placeholder="系統回傳" readonly>
+        </div>
+    </div>
+    <div class="div1">
+        <div><h2 style="color: #FF0000;">背景/出貨發佈</h2><br>
+            背景圖片
+            <input id="photo3" type="text" value="" placeholder="系統回傳" ><br>
+            出貨圖片
+            <input id="photo4" type="text" value="" placeholder="系統回傳" ><br>
+        </div><br>
+        <button id="UpdateAdsbackground">更新背景</button><br>
+    </div>
+ 
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+ <!-- 引入 CryptoJS 庫計算sha256 -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+<script>
+        const company = localStorage.getItem("company");//營運編號EX→2000043
+        const token = localStorage.getItem("token");//token
+        const code = localStorage.getItem("code");//設備編號EX→F638C62401B1FF
+        // console.log(company); 
+        // console.log(token); 
+     //圖片上傳並且判斷(背景圖)
+     document.getElementById('fileInput1').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        // 檢查檔案大小
+        const fileSizeBytes = file.size;
+        const maxFileSizeBytes = 1000 * 1024; // 100KB以位元組為單位
+        if (fileSizeBytes > maxFileSizeBytes) {
+            alert("檔案大小超過1000KB");
+            return; // 檔案過大，停止後續處理
+        }
+        // 創建圖片對象以檢查尺寸
+        const img = new Image();
+        const objectURL = URL.createObjectURL(file);
+        img.onload = function() {
+            const imageWidth = img.width;
+            const imageHeight = img.height;
+            const requiredWidth = 1080;  // 必須是 1080px 寬度
+            const requiredHeight = 1920; // 必須是 1920px 高度
+            if (imageWidth !== requiredWidth || imageHeight !== requiredHeight) {
+                alert(`圖片尺寸必須為 ${requiredWidth}px x ${requiredHeight}px，當前尺寸為 ${imageWidth}px x ${imageHeight}px`);
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    let base64String = event.target.result;
+                    // 移除前綴部分
+                    base64String = base64String.replace(/^data:image\/(png|jpg|jpeg);base64,/, '');
+                    // 替換 / 為換行
+                    base64String = base64String.replace(/\//g, '/\n');
+                    // 顯示圖片和 Base64 字符串
+                    document.getElementById('uploadedImage1').src = objectURL;
+                    document.getElementById('base64Output1').textContent = base64String;
+                    document.getElementById('filesize1').textContent = '檔案大小: ' + (fileSizeBytes / 1024).toFixed(2) + ' KB';
+                };
+                reader.readAsDataURL(file); // 讀取檔案
+            }
+        };
+        img.src = objectURL; // 開始載入圖片來檢查尺寸
+    }
+});
+    async function calculateSHA256(input) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(input);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    document.getElementById('uploadButton1').addEventListener('click', async function() {
+        const base64String = document.getElementById('base64Output1').value;
+        const fileInput1 = document.getElementById('fileInput1');
+        const file = fileInput1.files[0];
+        if (base64String && file) {
+            const nameWithExtension = file.name;  // 包含副檔名的檔案名稱
+            const name = nameWithExtension.substring(0, nameWithExtension.lastIndexOf('.')) || nameWithExtension; // 去除副檔名
+            const size = file.size;  // 使用上傳圖片的大小（位元組）
+            const type = "1";
+            const inputString = "company=" + company + "&name=" + name + "&size=" + size + "&type=" + type + token;
+            const hash = await calculateSHA256(inputString);
+            let payload = base64String;
+
+            axios.post('https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/Image.aspx', payload, {
+                maxBodyLength: Infinity,
+                params: {
+                    company: company,
+                    name: name,
+                    size: size,
+                    type: type,
+                    sign: hash,
+                }
+            })
+            .then(response => {
+                document.getElementById('photo1').value = response.data.file;
+                document.getElementById('photo3').value = response.data.file;
+
+                alert('圖片上傳成功');
+            })
+            .catch(error => {
+                console.error('錯誤:', error);
+                alert('圖片上傳失敗');
+            });
+        } else {
+            alert('請先上傳圖片');
+        }
+    });
+    //圖片上傳並且判斷(出貨圖)
+    document.getElementById('fileInput2').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        // 檢查檔案大小
+        const fileSizeBytes = file.size;
+        const maxFileSizeBytes = 1000 * 1024; // 100KB以位元組為單位
+        if (fileSizeBytes > maxFileSizeBytes) {
+            alert("檔案大小超過1000KB");
+            return; // 檔案過大，停止後續處理
+        }
+        // 創建圖片對象以檢查尺寸
+        const img = new Image();
+        const objectURL = URL.createObjectURL(file);
+        img.onload = function() {
+            const imageWidth = img.width;
+            const imageHeight = img.height;
+            const requiredWidth = 1080;  // 必須是 1080px 寬度
+            const requiredHeight = 1920; // 必須是 1920px 高度
+            if (imageWidth !== requiredWidth || imageHeight !== requiredHeight) {
+                alert(`圖片尺寸必須為 ${requiredWidth}px x ${requiredHeight}px，當前尺寸為 ${imageWidth}px x ${imageHeight}px`);
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    let base64String = event.target.result;
+                    // 移除前綴部分
+                    base64String = base64String.replace(/^data:image\/(png|jpg|jpeg);base64,/, '');
+                    // 替換 / 為換行
+                    base64String = base64String.replace(/\//g, '/\n');
+                    // 顯示圖片和 Base64 字符串
+                    document.getElementById('uploadedImage2').src = objectURL;
+                    document.getElementById('base64Output2').textContent = base64String;
+                    document.getElementById('filesize2').textContent = '檔案大小: ' + (fileSizeBytes / 1024).toFixed(2) + ' KB';
+                };
+                reader.readAsDataURL(file); // 讀取檔案
+            }
+        };
+        img.src = objectURL; // 開始載入圖片來檢查尺寸
+    }
+});
+    async function calculateSHA256(input) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(input);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    document.getElementById('uploadButton2').addEventListener('click', async function() {
+        const base64String = document.getElementById('base64Output2').value;
+        const fileInput2 = document.getElementById('fileInput2');
+        const file = fileInput2.files[0];
+        if (base64String && file) {
+            const nameWithExtension = file.name;  // 包含副檔名的檔案名稱
+            const name = nameWithExtension.substring(0, nameWithExtension.lastIndexOf('.')) || nameWithExtension; // 去除副檔名
+            const size = file.size;  // 使用上傳圖片的大小（位元組）
+            const type = "1";
+            const inputString = "company=" + company + "&name=" + name + "&size=" + size + "&type=" + type + token;
+            const hash = await calculateSHA256(inputString);
+            let payload = base64String;
+
+            axios.post('https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/Image.aspx', payload, {
+                maxBodyLength: Infinity,
+                params: {
+                    company: company,
+                    name: name,
+                    size: size,
+                    type: type,
+                    sign: hash,
+                }
+            })
+            .then(response => {
+                document.getElementById('photo2').value = response.data.file;
+                document.getElementById('photo4').value = response.data.file;
+
+                alert('圖片上傳成功');
+            })
+            .catch(error => {
+                console.error('錯誤:', error);
+                alert('圖片上傳失敗');
+            });
+        } else {
+            alert('請先上傳圖片');
+        }
+    });
+
+    //更新背景圖
+    document.getElementById("UpdateAdsbackground").addEventListener("click", async function() {
+        const photo3 = document.getElementById("photo3").value;
+        const photo4 = document.getElementById("photo4").value;
+
+        if (!company || !token || !code || !photo3 || !photo4 ) {
+            alert("缺少必要的參數");
+            return;
+        }
+        
+        // 假設sign是SHA256加密後的字符串，您需要依照API的實際要求來計算簽名
+        const inputString = `code=${code}&company=${company}&image1=${photo3}&image2=${photo3}&image3=${photo3}&image4=${photo4}&image5=${photo3}${token}`;
+        const sign = CryptoJS.SHA256(inputString).toString(CryptoJS.enc.Hex); // 計算SHA256
+        
+        const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/ProgramImage.aspx?code=${code}&company=${company}&image1=${photo3}&image2=${photo3}&image3=${photo3}&image4=${photo4}&image5=${photo3}&sign=${sign}`;
+        
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            });
+
+            const result = await response.text();
+            console.log("API Response:", result);
+            alert("更新成功: " + result);
+        } catch (error) {
+            console.error("API Error:", error);
+            alert("請求失敗");
+        }
+    });
+
+</script>
+</body>
+</html>

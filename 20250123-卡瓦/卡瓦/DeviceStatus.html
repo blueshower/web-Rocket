@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="DeviceStatusCSS.css">
+    <script>
+      if (window.location !== window.parent.location) {
+        // 在 iframe 內，則不做任何跳轉
+      } else {
+        //被獨立開啟，導向 index.html
+        window.location.href = "index.html";
+      }
+    </script>
+</head>
+<body>
+</p>
+<div>設備狀態→<span><button class="button" onclick="apirock02()">設備更新</button></span></div>
+<hr>
+<div class="container">
+</div>
+    <div class="column" style="width: 200px;">
+        <div id="api02-0-1" class="itemblue">設備狀態</div>
+        <div id="api02-0-2" class="itemblue fsize">編號：</div>
+        <div id="api02-0-3" class="itemblue fsize">時間：</div>
+        <div id="api02-0-4" class="itemblue">溫度：</div>
+    </div>
+</div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+//apirock02設備最後上線時間
+const online1 = "<span style='color:#00FF00;font-weight:bold;'>上線</span>";
+const offline1 ="<span style='color:#FF0000;font-weight:bold;'>離線</span>";
+//取得現在時間↓ nowtime1
+const nowtime1 = new Date();
+const offline2 ="<span style='color:#FF0000;font-weight:bold;'>溫度異常</span>";
+//溫度上限值↓
+const temperature1 = 60;
+// 外部取得company與token
+  const company = localStorage.getItem("company");//營運編號EX→2000043
+  const token = localStorage.getItem("token");//token
+    // console.log(company); 
+    // console.log(token);
+
+    // 通用的 SHA256 計算函式
+    async function calculateSHA256(input) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(input);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+async function apirock02(){
+  axios.get('https://cors-anywhere.herokuapp.com/https://api.tenlifeservice.com/MachineState.aspx',
+  {
+    params:{
+    company:company,
+    sign: await calculateSHA256(`company=${company}${token}`)}
+  })
+    .then(function(response){
+      //設備狀態
+      document.querySelector("#api02-0-2").innerHTML="編號："  + response.data.machine[0].code;
+      document.querySelector("#api02-0-3").innerHTML="時間："  + response.data.machine[0].uploadTime;
+      let uploadTime0 = new Date(response.data.machine[0].uploadTime);
+      uploadTime0.setMinutes(uploadTime0.getMinutes() + 5);
+      document.querySelector("#api02-0-4").innerHTML="溫度："  + response.data.machine[0].temperature1 +"度";
+      if ( response.data.machine[0].temperature1 >=60){document.querySelector("#api02-0-1").innerHTML="站別：卡瓦02" + "-" + online1;}
+      if ( response.data.machine[0].temperature1 >temperature1){document.querySelector("#api02-0-1").innerHTML="站別：卡瓦02 "+ "-" + offline2;}
+      if (nowtime1 > uploadTime0) { document.querySelector("#api02-0-1").innerHTML = "站別：卡瓦02 - "+offline1 ;}
+    })
+    .catch( (error) => console.log(error))
+}
+</script>  
+</body>
+</html>
